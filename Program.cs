@@ -374,7 +374,7 @@ internal class Program
             for (int j = 0; j < w; j++)
             {
                 // Set the current pixel color
-                bm.SetPixel(j, i, Color.FromArgb(pixel[1], pixel[2], pixel[3]));
+                bm.SetPixel(j, i, Color.FromArgb(pixel[3], pixel[2], pixel[1]));
 
                 // Load new pixel run
                 if ((pixel[0] | 0x80) == 0x80 && rle)
@@ -421,9 +421,9 @@ internal class Program
                 Color color = bmp.GetPixel(j, i);
 
                 // Write the pixel to the result
-                result[pos] = color.R;
+                result[pos] = color.B;
                 result[pos + 1] = color.G;
-                result[pos+2] = color.B;
+                result[pos+2] = color.R;
             }
         }
 
@@ -455,7 +455,7 @@ internal class Program
                         result.Add((byte)(run_colors.Count - 1));
                         foreach (Color c in run_colors)
                         {
-                            result.AddRange(new byte[] { c.R, c.G, c.B });
+                            result.AddRange(new byte[] { c.B, c.G, c.R });
                         }
                         run_colors.Clear();
                     }
@@ -464,7 +464,7 @@ internal class Program
                     run_len++;
                     if (run_len == 0x80)
                     {
-                        result.AddRange(new byte[] { 0xFF, run_color.R, run_color.G, run_color.B });
+                        result.AddRange(new byte[] { 0xFF, run_color.B, run_color.G, run_color.R });
                         run_len = 0;
                     }
                 }
@@ -474,7 +474,7 @@ internal class Program
                     // If there is a run of the last color, flush it
                     if (run_len > 0)
                     {
-                        result.AddRange(new byte[] { (byte)(run_len | 0x80), run_color.R, run_color.G, run_color.B });
+                        result.AddRange(new byte[] { (byte)(run_len | 0x80), run_color.B, run_color.G, run_color.R });
                         run_len = 0;
                     }
                     // Else add last color to varying color run
@@ -487,7 +487,7 @@ internal class Program
                             result.Add(0x7F);
                             foreach (Color c in run_colors)
                             {
-                                result.AddRange(new byte[] { c.R, c.G, c.B });
+                                result.AddRange(new byte[] { c.B, c.G, c.R });
                             }
                             run_colors.Clear();
                         }
@@ -505,12 +505,12 @@ internal class Program
                 result.Add((byte)(run_colors.Count - 1));
                 foreach (Color c in run_colors)
                 {
-                    result.AddRange(new byte[] { c.R, c.G, c.B });
+                    result.AddRange(new byte[] {c.B, c.G, c.R });
                 }
             }
             else
             {
-                result.AddRange(new byte[] { (byte)(run_len | 0x80), run_color.R, run_color.G, run_color.B });
+                result.AddRange(new byte[] { (byte)(run_len | 0x80), run_color.B, run_color.G, run_color.R });
             }
         }
 
